@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ProjectManagement</string>
+    <string name="splash_screen_text">Project Management</string>
+    <string name="carbon_font_name">carbon bl.ttf</string>
+
+</resources>
