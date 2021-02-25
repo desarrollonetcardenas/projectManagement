@@ -1,12 +1,14 @@
-package android.kotlin.projectmanagement
+package android.kotlin.projectmanagement.activities
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.kotlin.projectmanagement.databinding.ActivitySplashBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.WindowManager
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,11 @@ class SplashActivity : AppCompatActivity() {
             Typeface.createFromAsset(assets, "carbon bl.ttf")
 
         binding.tvAppName.typeface = typeFace
+
+        Handler().postDelayed({
+            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            finish()
+        }, 2500)
 
 
     }

@@ -1,10 +1,11 @@
-package android.kotlin.projectmanagement
+package android.kotlin.projectmanagement.activities
 
+import android.kotlin.projectmanagement.R
 import android.kotlin.projectmanagement.databinding.ActivitySplashBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 

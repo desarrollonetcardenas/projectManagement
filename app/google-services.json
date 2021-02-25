@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057360741573",
+    "project_id": "projectmanagement-cbfa9",
+    "storage_bucket": "projectmanagement-cbfa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057360741573:android:6fa596f944a344d10ddcac",
+        "android_client_info": {
+          "package_name": "android.kotlin.projectmanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057360741573-7339fv868pj8ug68c4l3u4m82jjd8ocm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFOcepc3Z1uUQQuVIo9v0DZhAbRLsYYI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057360741573-7339fv868pj8ug68c4l3u4m82jjd8ocm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
