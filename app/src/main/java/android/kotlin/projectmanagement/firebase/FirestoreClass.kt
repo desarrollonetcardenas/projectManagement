@@ -1,7 +1,7 @@
 package android.kotlin.projectmanagement.firebase
 
-import android.kotlin.projectmanagement.activities.SingInActivity
-import android.kotlin.projectmanagement.activities.SingUpActivity
+import android.kotlin.projectmanagement.activities.SignInActivity
+import android.kotlin.projectmanagement.activities.SignUpActivity
 import android.kotlin.projectmanagement.models.User
 import android.kotlin.projectmanagement.utils.Constants
 import android.util.Log
@@ -11,15 +11,15 @@ import com.google.firebase.firestore.SetOptions
 
 class FirestoreClass {
 
-    private val mFirestore = FirebaseFirestore.getInstance()
+    private val mFireStore = FirebaseFirestore.getInstance()
 
-    fun registerUser(activity: SingUpActivity, userInfo: User) {
+    fun registerUser(activity: SignUpActivity, userInfo: User) {
 
-        mFirestore.collection(Constants.USERS)
+        mFireStore.collection(Constants.USERS)
                 .document(getCurrentUserID())
                 .set(userInfo, SetOptions.merge())
                 .addOnSuccessListener {
-                    activity.userRegisterSuccess()
+                    activity.userRegisteredSuccess()
                 }
     }
 
@@ -35,9 +35,9 @@ class FirestoreClass {
         return currentUserID
     }
 
-    fun signInUser(activity: SingInActivity) {
+    fun signInUser(activity: SignInActivity) {
 
-        mFirestore.collection(Constants.USERS)
+        mFireStore.collection(Constants.USERS)
                 // The document id to get the Fields of user.
                 .document(getCurrentUserID())
                 .get()

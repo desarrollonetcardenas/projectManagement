@@ -12,9 +12,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 
-class SingInActivity : BaseActivity() {
+class SignInActivity : BaseActivity() {
     private lateinit var binding: ActivitySingInBinding
-    private lateinit var auth : FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,8 +36,8 @@ class SingInActivity : BaseActivity() {
         auth = FirebaseAuth.getInstance()
 
         window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         setupActionBar()
     }
@@ -48,34 +48,25 @@ class SingInActivity : BaseActivity() {
         val password = binding.etPassword.text.toString().trim { it <= ' ' }
         val user = SingValidations()
 
-        if (user.signInValidate( email, password )) {
+        if (user.signInValidate(email, password)) {
 
             showProgressDialog(resources.getString(R.string.please_wait))
 
-            FirestoreClass().signInUser(this)
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
 
-            /*auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        FirestoreClass().signInUser(this)
+                    } else {
 
-                        if (task.isSuccessful) {
-
-                            hideProgressDialog()
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("SingIn", "signInWithEmail:success")
-                            val user = auth.currentUser
-                            Toast.makeText(baseContext, "Welcome $email",
-                                    Toast.LENGTH_SHORT).show()
-
-                            startActivity(Intent(this,  MainActivity::class.java))
-
-                        } else {
-
-                            // If sign in fails, display a message to the user.
-                            Log.w("SingIn", "User sing in failed", task.exception)
-                            Toast.makeText(baseContext, "Sing In authentication failed.",
-                                    Toast.LENGTH_SHORT).show()
-                        }
-                    }*/
+                        // If sign in fails, display a message to the user.
+                        Log.w("SingIn", "User sing in failed", task.exception)
+                        Toast.makeText(
+                            this, "Sing In authentication failed.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
         }
 
     }
@@ -90,7 +81,7 @@ class SingInActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_black_24dp)
         }
 
-        binding.toolbarSignInActivity.setNavigationOnClickListener{
+        binding.toolbarSignInActivity.setNavigationOnClickListener {
             onBackPressed()
         }
 

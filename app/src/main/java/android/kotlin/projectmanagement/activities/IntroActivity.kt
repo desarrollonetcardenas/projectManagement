@@ -3,7 +3,6 @@ package android.kotlin.projectmanagement.activities
 import android.content.Intent
 import android.graphics.Typeface
 import android.kotlin.projectmanagement.databinding.ActivityIntroBinding
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 
@@ -27,11 +26,11 @@ class IntroActivity : BaseActivity() {
         binding.tvAppNameIntro.typeface = typeFace
 
         binding.btnSignUpIntro.setOnClickListener {
-            startActivity(Intent(this, SingUpActivity::class.java))
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
 
         binding.btnSignInIntro.setOnClickListener {
-            startActivity(Intent(this, SingInActivity::class.java))
+            startActivity(Intent(this, SignInActivity::class.java))
         }
 
     }
