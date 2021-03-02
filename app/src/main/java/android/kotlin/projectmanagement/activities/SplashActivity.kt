@@ -12,6 +12,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -33,7 +34,6 @@ class SplashActivity : BaseActivity() {
             startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
             finish()
         }, 2500)
-
 
     }
 }

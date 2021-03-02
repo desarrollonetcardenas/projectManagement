@@ -3,6 +3,8 @@ package android.kotlin.projectmanagement.activities
 import android.content.Intent
 import android.kotlin.projectmanagement.R
 import android.kotlin.projectmanagement.databinding.ActivitySingInBinding
+import android.kotlin.projectmanagement.firebase.FirestoreClass
+import android.kotlin.projectmanagement.models.User
 import android.kotlin.projectmanagement.utils.SingValidations
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +17,7 @@ class SingInActivity : BaseActivity() {
     private lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySingInBinding.inflate(layoutInflater)
         val view = binding.root
@@ -28,6 +31,7 @@ class SingInActivity : BaseActivity() {
     }
 
     private fun bootstrapValues() {
+
         /*Initialize auth variable*/
         auth = FirebaseAuth.getInstance()
 
@@ -39,6 +43,7 @@ class SingInActivity : BaseActivity() {
     }
 
     private fun signInRegisteredUser() {
+
         val email = binding.etEmail.text.toString().trim { it <= ' ' }
         val password = binding.etPassword.text.toString().trim { it <= ' ' }
         val user = SingValidations()
@@ -47,7 +52,9 @@ class SingInActivity : BaseActivity() {
 
             showProgressDialog(resources.getString(R.string.please_wait))
 
-            auth.signInWithEmailAndPassword(email, password)
+            FirestoreClass().signInUser(this)
+
+            /*auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
 
                         if (task.isSuccessful) {
@@ -68,12 +75,13 @@ class SingInActivity : BaseActivity() {
                             Toast.makeText(baseContext, "Sing In authentication failed.",
                                     Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    }*/
         }
 
     }
 
     private fun setupActionBar() {
+
         setSupportActionBar(binding.toolbarSignInActivity)
 
         val actionBar = supportActionBar
@@ -86,6 +94,15 @@ class SingInActivity : BaseActivity() {
             onBackPressed()
         }
 
+    }
+
+    fun singInSuccess(loggedInUser: User) {
+
+        hideProgressDialog()
+
+        startActivity(Intent(this, MainActivity::class.java))
+
+        finish()
     }
 
 }

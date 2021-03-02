@@ -2,6 +2,8 @@ package android.kotlin.projectmanagement.activities
 
 import android.kotlin.projectmanagement.R
 import android.kotlin.projectmanagement.databinding.ActivitySingUpBinding
+import android.kotlin.projectmanagement.firebase.FirestoreClass
+import android.kotlin.projectmanagement.models.User
 import android.kotlin.projectmanagement.utils.SingValidations
 import android.os.Bundle
 import android.view.WindowManager
@@ -14,6 +16,7 @@ class SingUpActivity : BaseActivity() {
     private lateinit var binding: ActivitySingUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySingUpBinding.inflate(layoutInflater)
         val view = binding.root
@@ -29,9 +32,11 @@ class SingUpActivity : BaseActivity() {
         binding.btnSignUp.setOnClickListener {
             registerUser()
         }
+
     }
 
     private fun setupActionBar() {
+
         setSupportActionBar(binding.toolbarSignUpActivity)
 
         val actionBar = supportActionBar
@@ -43,9 +48,11 @@ class SingUpActivity : BaseActivity() {
         binding.toolbarSignUpActivity.setNavigationOnClickListener{
             onBackPressed()
         }
+
     }
 
     private fun registerUser() {
+
         val name : String = binding.etName.text.toString().trim { it <= ' ' }
         val email : String = binding.etEmail.text.toString().trim { it <= ' ' }
         val password : String = binding.etPassword.text.toString().trim { it <= ' ' }
@@ -59,13 +66,15 @@ class SingUpActivity : BaseActivity() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         task ->
-                        hideProgressDialog()
 
                         if (task.isSuccessful) {
                             try {
 
                                 val firebaseUser: FirebaseUser = task.result!!.user!!
                                 val registeredEmail = firebaseUser.email!!
+                                val user = User(firebaseUser.uid, name, registeredEmail)
+
+                                FirestoreClass().registerUser(this, user)
 
                                 Toast.makeText(this,
                                         "$name you have successfully registered the email $registeredEmail ",
@@ -76,16 +85,33 @@ class SingUpActivity : BaseActivity() {
                                 finish()
 
                             } catch (e: Exception) {
+
                             }
                         } else {
                             Toast.makeText(this,
                                     "Sorry we could´nt register your user. Please contact your administrator. Err: ${task.exception!!.message}",
                                     Toast.LENGTH_SHORT)
                                     .show()
+                            finish()
+
                         }
+                        hideProgressDialog()
                     }
         }
 
+    }
+
+    fun userRegisterSuccess() {
+
+        Toast
+            .makeText(this, "You have successfully registered", Toast.LENGTH_SHORT)
+            .show()
+
+        hideProgressDialog()
+
+        FirebaseAuth.getInstance().signOut()
+
+        finish()
     }
 
 
