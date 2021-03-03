@@ -23,7 +23,7 @@ class FirestoreClass {
                 }
     }
 
-    private fun getCurrentUserID(): String {
+    fun getCurrentUserID(): String {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         var currentUserID = ""
@@ -48,6 +48,9 @@ class FirestoreClass {
 
                     // Here we have received the document snapshot which is converted into the User Data model object.
                     val loggedInUser = document.toObject(User::class.java)!!
+
+                    if(loggedInUser != null)
+                        activity.singInSuccess(loggedInUser)
 
                     // Here call a function of base activity for transferring the result to it.
                     activity.singInSuccess(loggedInUser)

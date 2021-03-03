@@ -3,6 +3,7 @@ package android.kotlin.projectmanagement.activities
 import android.content.Intent
 import android.graphics.Typeface
 import android.kotlin.projectmanagement.databinding.ActivitySplashBinding
+import android.kotlin.projectmanagement.firebase.FirestoreClass
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -31,8 +32,16 @@ class SplashActivity : BaseActivity() {
         binding.tvAppName.typeface = typeFace
 
         Handler().postDelayed({
-            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+
+            var currentUserID = FirestoreClass().getCurrentUserID()
+
+            if (currentUserID.isNotEmpty())
+                startActivity(Intent(this, MainActivity::class.java))
+            else
+                startActivity(Intent(this, IntroActivity::class.java))
+
             finish()
+
         }, 2500)
 
     }
