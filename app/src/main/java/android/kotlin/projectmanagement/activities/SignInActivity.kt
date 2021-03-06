@@ -42,6 +42,21 @@ class SignInActivity : BaseActivity() {
         setupActionBar()
     }
 
+    private fun setupActionBar() {
+
+        setSupportActionBar(binding.toolbarSignInActivity)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_black_24dp)
+        }
+
+        binding.toolbarSignInActivity.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+    }
     private fun signInRegisteredUser() {
 
         val email = binding.etEmail.text.toString().trim { it <= ' ' }
@@ -67,22 +82,6 @@ class SignInActivity : BaseActivity() {
                         ).show()
                     }
                 }
-        }
-
-    }
-
-    private fun setupActionBar() {
-
-        setSupportActionBar(binding.toolbarSignInActivity)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_black_color_black_24dp)
-        }
-
-        binding.toolbarSignInActivity.setNavigationOnClickListener {
-            onBackPressed()
         }
 
     }

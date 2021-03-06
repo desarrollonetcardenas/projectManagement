@@ -5,8 +5,9 @@ import android.graphics.Typeface
 import android.kotlin.projectmanagement.databinding.ActivityIntroBinding
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 
-class IntroActivity : BaseActivity() {
+class IntroActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityIntroBinding
 
@@ -25,13 +26,12 @@ class IntroActivity : BaseActivity() {
 
         binding.tvAppNameIntro.typeface = typeFace
 
-        binding.btnSignUpIntro.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
-
         binding.btnSignInIntro.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
         }
 
+        binding.btnSignUpIntro.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+        }
     }
 }
