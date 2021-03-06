@@ -1,15 +1,17 @@
-package android.kotlin.projectmanagement.activities
+package com.projemanag.activities
 
 import android.content.Intent
-import android.kotlin.projectmanagement.R
-import android.kotlin.projectmanagement.databinding.ActivityMainBinding
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.projemanag.R
+import com.projemanag.databinding.ActivityMainBinding
 
+// TODO (Step 6: Implement the NavigationView.OnNavigationItemSelectedListener and add the implement members of it.)
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding : ActivityMainBinding
@@ -23,9 +25,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
-        setContentView(view)
 
         // This is used to align the xml view to this class
+        setContentView(view)
+
+        // TODO (Step 4: Call the setup action bar function here.)
         // START
         setupActionBar()
         // END
@@ -84,12 +88,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     private fun setupActionBar() {
 
-        setSupportActionBar(binding.toolbar_main_activity)
-        binding.toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_main_activity)
+
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
         // TODO (Step 3: Add click event for navigation in the action bar and call the toggleDrawer function.)
         // START
-        binding.toolbar_main_activity.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             toggleDrawer()
         }
         // END

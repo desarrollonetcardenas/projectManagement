@@ -1,4 +1,4 @@
-package android.kotlin.projectmanagement.models
+package com.projemanag.model
 
 import android.os.Parcel
 import android.os.Parcelable

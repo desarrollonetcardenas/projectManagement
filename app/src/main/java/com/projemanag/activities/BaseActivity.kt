@@ -1,18 +1,15 @@
-package android.kotlin.projectmanagement.activities
+package com.projemanag.activities
 
 import android.app.Dialog
-import android.kotlin.projectmanagement.R
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.projemanag.R
 
-// TODO (Step 4: Here we have created a BaseActivity Class in which we have added the progress dialog and SnackBar. Now all the activity will extend the BaseActivity instead of AppCompatActivity.)
-// START
 open class BaseActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
@@ -34,8 +31,7 @@ open class BaseActivity : AppCompatActivity() {
 
         /*Set the screen content from a layout resource.
         The resource will be inflated, adding all top-level views to the screen.*/
-        val dialog = mProgressDialog.setContentView(R.layout.dialog_progress)
-
+        mProgressDialog.setContentView(R.layout.dialog_progress)
 
         //Start the dialog and display it on screen.
         mProgressDialog.show()
@@ -60,9 +56,9 @@ open class BaseActivity : AppCompatActivity() {
 
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(
-            this,
-            resources.getString(R.string.please_click_back_again_to_exit),
-            Toast.LENGTH_SHORT
+                this,
+                resources.getString(R.string.please_click_back_again_to_exit),
+                Toast.LENGTH_SHORT
         ).show()
 
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
@@ -70,13 +66,13 @@ open class BaseActivity : AppCompatActivity() {
 
     fun showErrorSnackBar(message: String) {
         val snackBar =
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+                Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(
-            ContextCompat.getColor(
-                this@BaseActivity,
-                R.color.snackbar_error_color
-            )
+                ContextCompat.getColor(
+                        this@BaseActivity,
+                        R.color.snackbar_error_color
+                )
         )
         snackBar.show()
     }
