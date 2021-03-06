@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="splash_screen_title_text_size">70sp</dimen>
 
-    <dimen name="splash_screen_title_text_size">60sp</dimen>
-
-    <!--IntroActivity values here-->
     <dimen name="intro_screen_title_text_size">40sp</dimen>
     <dimen name="intro_screen_title_text_marginTop">40dp</dimen>
     <dimen name="intro_screen_image_marginTop">30dp</dimen>
@@ -18,10 +16,7 @@
     <dimen name="btn_paddingTopBottom">8dp</dimen>
     <dimen name="intro_screen_sign_up_btn_marginTop">15dp</dimen>
     <dimen name="btn_text_size">18sp</dimen>
-    <!--END-->
 
-    <!--SignUp Activity values here-->
-    <!--START-->
     <dimen name="sign_up_screen_btn_marginTop">30dp</dimen>
     <dimen name="toolbar_title_text_size">18sp</dimen>
     <dimen name="authentication_screen_content_marginTop">40dp</dimen>
@@ -34,18 +29,15 @@
     <dimen name="authentication_screen_til_marginStartEnd">16dp</dimen>
     <dimen name="et_text_size">16sp</dimen>
     <dimen name="authentication_screen_til_marginTop">20dp</dimen>
-    <!--END-->
 
-    <!--SignIn Activity values here -->
     <dimen name="authentication_screen_marginTop">60dp</dimen>
 
-    <!--Progress Dialog values here -->
     <dimen name="progress_dialog_content_padding">10dp</dimen>
     <dimen name="progress_bar_size">50dp</dimen>
     <dimen name="progress_text_marginStart">16dp</dimen>
     <dimen name="progress_text_size">16sp</dimen>
 
-    <dimen name="height_of_nav_main">410dp</dimen>
+    <dimen name="height_of_nav_main">200dp</dimen>
     <dimen name="nav_image_size">80dp</dimen>
     <dimen name="nav_content_margin_StartEnd">16dp</dimen>
     <dimen name="nav_content_margin_top">5dp</dimen>
@@ -53,5 +45,4 @@
     <dimen name="nav_user_name_text_size">18sp</dimen>
     <dimen name="nav_image_circular_border_width">1dp</dimen>
     <dimen name="nav_divider_height">0.5dp</dimen>
-
 </resources>

@@ -1,6 +1,6 @@
-package android.kotlin.projectmanagement.utils
+package com.projemanag
 
-import android.kotlin.projectmanagement.activities.BaseActivity
+import com.projemanag.activities.BaseActivity
 import android.text.TextUtils
 
 class SingValidations : BaseActivity() {

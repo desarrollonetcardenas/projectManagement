@@ -1,4 +1,4 @@
-package android.kotlin.projectmanagement
+package android.kotlin.projemanag
 
 import org.junit.Test
 
