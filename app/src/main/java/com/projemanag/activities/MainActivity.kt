@@ -3,13 +3,18 @@ package com.projemanag.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.projemanag.R
 import com.projemanag.databinding.ActivityMainBinding
+import com.projemanag.firebase.FirestoreClass
+import com.projemanag.model.User
 
 // TODO (Step 6: Implement the NavigationView.OnNavigationItemSelectedListener and add the implement members of it.)
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -39,6 +44,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         binding.navView.setNavigationItemSelectedListener(this)
         // END
+
+        FirestoreClass().signInUser(this)
     }
 
     // TODO (Step 5: Add a onBackPressed function and check if the navigation drawer is open or closed.)
@@ -115,5 +122,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
-    // END
+
+    fun updateNavigationUserDetails(user: User) {
+
+        val navUserImageView = findViewById<ImageView>(R.id.nav_user_image)
+
+        Glide
+            .with(this)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(navUserImageView);
+
+        val tvUserName = findViewById<TextView>(R.id.tv_username)
+        tvUserName.text = user.name
+    }
 }
