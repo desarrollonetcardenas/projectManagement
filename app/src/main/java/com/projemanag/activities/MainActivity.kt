@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
@@ -45,7 +44,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         binding.navView.setNavigationItemSelectedListener(this)
         // END
 
-        FirestoreClass().signInUser(this)
+        FirestoreClass().loadUserData(this)
     }
 
     // TODO (Step 5: Add a onBackPressed function and check if the navigation drawer is open or closed.)
@@ -67,8 +66,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // START
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-
-                Toast.makeText(this@MainActivity, "My Profile", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MyProfileActivity::class.java))
             }
 
             R.id.nav_sign_out -> {

@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.projemanag.activities.MainActivity
+import com.projemanag.activities.MyProfileActivity
 import com.projemanag.activities.SignInActivity
 import com.projemanag.activities.SignUpActivity
 import com.projemanag.model.User
@@ -46,7 +47,7 @@ class FirestoreClass {
     /**
      * A function to SignIn using firebase and get the user details from Firestore Database.
      */
-    fun signInUser(activity: Activity) {
+    fun loadUserData(activity: Activity) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
@@ -69,6 +70,10 @@ class FirestoreClass {
                         is MainActivity -> {
                             activity.updateNavigationUserDetails(loggedInUser)
                         }
+
+                        is MyProfileActivity -> {
+                            activity.setUserDataInUI(loggedInUser)
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
@@ -86,6 +91,11 @@ class FirestoreClass {
                         is MainActivity -> {
                             activity.hideProgressDialog()
                         }
+
+                        is MyProfileActivity -> {
+                            activity.hideProgressDialog()
+                        }
+
                     }
 
                 }
