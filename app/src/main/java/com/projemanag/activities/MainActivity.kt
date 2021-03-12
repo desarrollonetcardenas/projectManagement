@@ -5,27 +5,34 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.Button
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.projemanag.R
+import com.projemanag.adapters.BoardItemsAdapter
 import com.projemanag.databinding.ActivityMainBinding
 import com.projemanag.firebase.FirestoreClass
 import com.projemanag.model.User
+import com.projemanag.models.Board
+import com.projemanag.utils.Constants
 
-// TODO (Step 6: Implement the NavigationView.OnNavigationItemSelectedListener and add the implement members of it.)
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var mUserName: String
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE: Int = 11
+        const val CREATE_BOARD_REQUEST_CODE: Int = 12
     }
 
     /**
@@ -41,22 +48,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // This is used to align the xml view to this class
         setContentView(view)
 
-        // TODO (Step 4: Call the setup action bar function here.)
-        // START
         setupActionBar()
-        // END
 
-        // TODO (Step 8: Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.)
-        // START
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         binding.navView.setNavigationItemSelectedListener(this)
-        // END
 
-        FirestoreClass().loadUserData(this)
+        FirestoreClass().loadUserData(this, true)
 
         val fabCreateBoard = findViewById<FloatingActionButton>(R.id.fab_create_board)
+
         fabCreateBoard.setOnClickListener {
-            startActivity(Intent(this, CreateBoardActivity::class.java))
+            val intent = Intent(this, CreateBoardActivity::class.java)
+
+            intent.putExtra(Constants.NAME, mUserName)
+            startActivityForResult(intent, Constants.CREATE_BOARD_REQUEST_CODE)
         }
 
     }
@@ -80,7 +85,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 && requestCode == MY_PROFILE_REQUEST_CODE) {
 
             FirestoreClass().loadUserData(this)
-        } else {
+        }
+        else if(requestCode == Constants.CREATE_BOARD_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            FirestoreClass().getBoardsList(this)
+        }
+        else {
             Log.e("Cancelled", "The user has cancelled the update profile action")
         }
 
@@ -151,7 +161,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    fun updateNavigationUserDetails(user: User) {
+    fun updateNavigationUserDetails(user: User, readBoardsList: Boolean) {
+
+        mUserName = user.name
 
         val navUserImageView = findViewById<ImageView>(R.id.nav_user_image)
 
@@ -164,5 +176,49 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         val tvUserName = findViewById<TextView>(R.id.tv_username)
         tvUserName.text = user.name
+
+        if(readBoardsList){
+            showProgressDialog(R.string.please_wait.toString())
+            FirestoreClass().getBoardsList(this)
+        }
+
     }
+
+    fun populateBoardsListToUI(boardsList: ArrayList<Board>) {
+
+        hideProgressDialog()
+
+        val rvBoardsList = findViewById<RecyclerView>(R.id.rv_boards_list)
+        val tvNoBoardsAvailable = findViewById<TextView>(R.id.tv_no_boards_available)
+
+        if(boardsList.size > 0) {
+
+            rvBoardsList.visibility = View.VISIBLE
+            tvNoBoardsAvailable.visibility = View.GONE
+
+            rvBoardsList.layoutManager = LinearLayoutManager(this)
+            rvBoardsList.setHasFixedSize(true)
+
+            var adapter = BoardItemsAdapter(this, boardsList)
+            rvBoardsList.adapter = adapter
+
+
+            /*onClick event linked to every single item in Boards List*/
+            adapter.setOnClickListener(object:
+                BoardItemsAdapter.OnClickListener {
+                override fun onClick(position: Int, model: Board) {
+                    val intent  = Intent(this@MainActivity, TaskListActivity::class.java)
+
+                    intent.putExtra(Constants.DOCUMENT_ID, model.documentId)
+                    startActivity(intent)
+                }
+            })
+
+        } else {
+            rvBoardsList.visibility = View.GONE
+            tvNoBoardsAvailable.visibility = View.VISIBLE
+        }
+
+    }
+
 }

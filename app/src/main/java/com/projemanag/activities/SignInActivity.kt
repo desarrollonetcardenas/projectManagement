@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.projemanag.R
+import com.projemanag.SingValidations
 import com.projemanag.firebase.FirestoreClass
 import com.projemanag.model.User
 import com.projemanag.databinding.ActivitySignInBinding
@@ -62,7 +63,7 @@ class SignInActivity : BaseActivity() {
         val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
         val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
-        if (validateForm(email, password)) {
+        if (SingValidations().signInValidate(email, password)) {
             // Show the progress dialog.
             showProgressDialog(resources.getString(R.string.please_wait))
 
@@ -80,21 +81,6 @@ class SignInActivity : BaseActivity() {
                         ).show()
                     }
                 }
-        }
-    }
-
-    /**
-     * A function to validate the entries of a user.
-     */
-    private fun validateForm(email: String, password: String): Boolean {
-        return if (TextUtils.isEmpty(email)) {
-            showErrorSnackBar("Please enter email.")
-            false
-        } else if (TextUtils.isEmpty(password)) {
-            showErrorSnackBar("Please enter password.")
-            false
-        } else {
-            true
         }
     }
 

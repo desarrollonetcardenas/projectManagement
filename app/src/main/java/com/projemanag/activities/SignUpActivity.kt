@@ -9,6 +9,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.projemanag.R
+import com.projemanag.SingValidations
 import com.projemanag.databinding.ActivitySignUpBinding
 import com.projemanag.firebase.FirestoreClass
 import com.projemanag.model.User
@@ -68,7 +69,7 @@ class SignUpActivity : BaseActivity() {
         val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
         val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
-        if (validateForm(name, email, password)) {
+        if ( SingValidations().signUpValidate(name, email, password) ) {
             // Show the progress dialog.
             showProgressDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -97,29 +98,6 @@ class SignUpActivity : BaseActivity() {
                             ).show()
                         }
                     })
-        }
-    }
-
-    /**
-     * A function to validate the entries of a new user.
-     */
-    private fun validateForm(name: String, email: String, password: String): Boolean {
-        return when {
-            TextUtils.isEmpty(name) -> {
-                showErrorSnackBar("Please enter name.")
-                false
-            }
-            TextUtils.isEmpty(email) -> {
-                showErrorSnackBar("Please enter email.")
-                false
-            }
-            TextUtils.isEmpty(password) -> {
-                showErrorSnackBar("Please enter password.")
-                false
-            }
-            else -> {
-                true
-            }
         }
     }
 

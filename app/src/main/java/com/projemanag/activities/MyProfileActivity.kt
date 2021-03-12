@@ -22,6 +22,7 @@ import com.projemanag.model.User
 import com.projemanag.utils.Constants
 import com.projemanag.utils.Constants.PICK_IMAGE_REQUEST_CODE
 import com.projemanag.utils.Constants.READ_STORAGE_PERMISSION_CODE
+import com.projemanag.utils.ImageUtils
 import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
@@ -57,7 +58,7 @@ class MyProfileActivity : BaseActivity() {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED
             ) {
-                showImageChooser()
+                ImageUtils().showImageChooser(this)
             } else {
                 /*Requests permissions to be granted to this application. These permissions
                  must be requested in your manifest, they should not be granted to your app,
@@ -129,7 +130,7 @@ class MyProfileActivity : BaseActivity() {
         if (requestCode == READ_STORAGE_PERMISSION_CODE) {
             //If permission is granted
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showImageChooser()
+                ImageUtils().showImageChooser(this)
             } else {
                 //Displaying another toast if permission is not granted
                 Toast.makeText(
@@ -184,19 +185,6 @@ class MyProfileActivity : BaseActivity() {
     }
 
     /**
-     * A function for user profile image selection from phone storage.
-     */
-    private fun showImageChooser() {
-        // An intent for launching the image selection of phone storage.
-        val galleryIntent = Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        // Launches the image selection of phone storage using the constant code.
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
-    }
-
-    /**
      * A function to upload the selected user image to firebase cloud storage.
      */
     private fun uploadUserImage() {
@@ -207,9 +195,7 @@ class MyProfileActivity : BaseActivity() {
 
             //getting the storage reference
             val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-                    "USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(
-                            mSelectedImageFileUri
-                    )
+                    "USER_IMAGE" + System.currentTimeMillis() + "." + ImageUtils().getFileExtension(this, mSelectedImageFileUri)
             )
 
             //adding the file to reference
@@ -245,27 +231,6 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    // TODO (Step 2: Create a function to get the extension of the selected image.)
-    // START
-    /**
-     * A function to get the extension of selected image.
-     */
-    private fun getFileExtension(uri: Uri?): String? {
-        /*
-         * MimeTypeMap: Two-way map that maps MIME-types to file extensions and vice versa.
-         *
-         * getSingleton(): Get the singleton instance of MimeTypeMap.
-         *
-         * getExtensionFromMimeType: Return the registered extension for the given MIME type.
-         *
-         * contentResolver.getType: Return the MIME type of the given content URL.
-         */
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
-    }
-    // END
-
-    // TODO (Step 9: Update the user profile details into the database.)
-    // START
     /**
      * A function to update the user profile details into the database.
      */

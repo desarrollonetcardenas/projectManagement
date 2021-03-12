@@ -6,11 +6,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.projemanag.activities.MainActivity
-import com.projemanag.activities.MyProfileActivity
-import com.projemanag.activities.SignInActivity
-import com.projemanag.activities.SignUpActivity
+import com.projemanag.activities.*
 import com.projemanag.model.User
+import com.projemanag.models.Board
+import com.projemanag.models.Task
 import com.projemanag.utils.Constants
 
 class FirestoreClass {
@@ -43,10 +42,27 @@ class FirestoreClass {
                 }
     }
 
+    fun createBoard(activity: CreateBoardActivity, boardInfo: Board) {
+        mFireStore.collection(Constants.BOARDS)
+                .document()
+                .set(boardInfo, SetOptions.merge())
+                .addOnSuccessListener {
+                    activity.boardCreatedSuccessfully()
+                }
+                .addOnFailureListener { e ->
+                    activity.hideProgressDialog()
+                    Log.e(
+                            activity.javaClass.name,
+                            "Error while creating a board",
+                            e
+                    )
+                }
+    }
+    
     /**
      * A function to SignIn using firebase and get the user details from Firestore Database.
      */
-    fun loadUserData(activity: Activity) {
+    fun loadUserData(activity: Activity, readBoardsList: Boolean = false) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
@@ -65,7 +81,7 @@ class FirestoreClass {
                             activity.signInSuccess(loggedInUser)
                         }
                         is MainActivity -> {
-                            activity.updateNavigationUserDetails(loggedInUser)
+                            activity.updateNavigationUserDetails(loggedInUser, readBoardsList)
                         }
                         is MyProfileActivity -> {
                             activity.setUserDataInUI(loggedInUser)
@@ -136,5 +152,63 @@ class FirestoreClass {
         }
 
         return currentUserID
+    }
+
+
+    fun getBoardsList(activity: MainActivity) {
+        mFireStore
+                .collection(Constants.BOARDS)
+                .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserID())
+                .get()
+                .addOnSuccessListener {
+                    document ->
+                    Log.e(activity.javaClass.simpleName, document.documents.toString())
+
+                    try {
+                        val boardsList: ArrayList<Board> = ArrayList()
+
+                        // A for loop as per the list of documents to convert them into Boards ArrayList.
+                        for(item in document.documents) {
+                            val board = item.toObject(Board::class.java)!!
+                            board.documentId = item.id
+                            boardsList.add(board)
+                        }
+
+                        activity.populateBoardsListToUI(boardsList)
+                    }catch(e: Exception) {
+                        Toast.makeText(activity, "Error occurred trying to load boards", Toast.LENGTH_LONG)
+                                .show()
+                        Log.e(javaClass.name, e.message.toString())
+                    }
+                }
+                .addOnFailureListener { e ->
+                    activity.hideProgressDialog()
+                    Log.e(activity.javaClass.simpleName, "Error while creating a board.", e)
+                }
+
+
+    }
+
+    fun getBoardDetails(taskListActivity: TaskListActivity, boardDocumentId: String) {
+        mFireStore
+            .collection(Constants.BOARDS)
+            .document(boardDocumentId)
+            .get()
+            .addOnSuccessListener {
+                    document ->
+                Log.i(taskListActivity.javaClass.simpleName, document.toString())
+
+                try {
+                    taskListActivity.boardDetails(document.toObject(Board::class.java)!!)
+                }catch(e: Exception) {
+                    Toast.makeText(taskListActivity, "Error occurred while getting board details", Toast.LENGTH_LONG)
+                        .show()
+                    Log.e(javaClass.name, e.message.toString())
+                }
+            }
+            .addOnFailureListener { e ->
+                taskListActivity.hideProgressDialog()
+                Log.e(taskListActivity.javaClass.simpleName, "Error accessing board details.", e)
+            }
     }
 }
