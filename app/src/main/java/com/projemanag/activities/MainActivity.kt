@@ -66,8 +66,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    // TODO (Step 5: Add a onBackPressed function and check if the navigation drawer is open or closed.)
-    // START
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -76,7 +74,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             doubleBackToExit()
         }
     }
-    // END
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -96,11 +93,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    // TODO (Step 7: Implement members of NavigationView.OnNavigationItemSelectedListener.)
-    // START
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        // TODO (Step 9: Add the click events of navigation menu items.)
-        // START
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
                 startActivityForResult(
@@ -121,13 +114,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
-        // END
         return true
     }
-    // END
 
-    // TODO (Step 1: Create a function to setup action bar.)
-    // START
     /**
      * A function to setup action bar
      */
@@ -138,17 +127,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
-        // TODO (Step 3: Add click event for navigation in the action bar and call the toggleDrawer function.)
-        // START
         toolbar.setNavigationOnClickListener {
             toggleDrawer()
         }
-        // END
     }
-    // END
 
-    // TODO (Step 2: Create a function for opening and closing the Navigation Drawer.)
-    // START
     /**
      * A function for opening and closing the Navigation Drawer.
      */

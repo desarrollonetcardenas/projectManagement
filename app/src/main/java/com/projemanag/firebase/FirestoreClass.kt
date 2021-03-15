@@ -52,7 +52,7 @@ class FirestoreClass {
                 .addOnFailureListener { e ->
                     activity.hideProgressDialog()
                     Log.e(
-                            activity.javaClass.name,
+                            activity.javaClass.simpleName,
                             "Error while creating a board",
                             e
                     )
@@ -109,8 +109,6 @@ class FirestoreClass {
                 }
     }
 
-    // TODO (Step 5: Create a function to update the user profile data into the database.)
-    // START
     /**
      * A function to update the user profile data into the database.
      */
@@ -136,7 +134,6 @@ class FirestoreClass {
                     )
                 }
     }
-    // END
 
     /**
      * A function for getting the user id of current logged user.
@@ -178,7 +175,7 @@ class FirestoreClass {
                     }catch(e: Exception) {
                         Toast.makeText(activity, "Error occurred trying to load boards", Toast.LENGTH_LONG)
                                 .show()
-                        Log.e(javaClass.name, e.message.toString())
+                        Log.e(javaClass.simpleName, e.message.toString())
                     }
                 }
                 .addOnFailureListener { e ->
@@ -196,14 +193,17 @@ class FirestoreClass {
             .get()
             .addOnSuccessListener {
                     document ->
-                Log.i(taskListActivity.javaClass.simpleName, document.toString())
-
                 try {
-                    taskListActivity.boardDetails(document.toObject(Board::class.java)!!)
+                    Log.i(taskListActivity.javaClass.simpleName, document.toString())
+
+                    val board = document.toObject(Board::class.java)!!
+                    board.documentId = document.id
+
+                    taskListActivity.boardDetails(board)
                 }catch(e: Exception) {
                     Toast.makeText(taskListActivity, "Error occurred while getting board details", Toast.LENGTH_LONG)
                         .show()
-                    Log.e(javaClass.name, e.message.toString())
+                    Log.e(javaClass.simpleName, e.message.toString())
                 }
             }
             .addOnFailureListener { e ->
@@ -211,4 +211,27 @@ class FirestoreClass {
                 Log.e(taskListActivity.javaClass.simpleName, "Error accessing board details.", e)
             }
     }
+
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board) {
+
+        val taskListHashMap = HashMap<String, Any>()
+        taskListHashMap[Constants.TASK_LIST] = board.taskList
+
+        mFireStore.collection(Constants.BOARDS)
+                .document(board.documentId)
+                .update(taskListHashMap)
+                .addOnSuccessListener {
+                    snapshot ->
+                    Log.i(this.javaClass.simpleName, "Task List Updated Successfully")
+
+                    activity.addUpdateTaskListSuccess()
+
+                    Log.i(this.javaClass.name, "snapshot: $snapshot")
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(this.javaClass.simpleName, "Error updating the task list: ${exception.message}", exception)
+                    activity.hideProgressDialog()
+                }
+    }
+
 }

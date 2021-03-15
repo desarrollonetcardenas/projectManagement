@@ -22,8 +22,6 @@
 
     <include layout="@layout/main_content" />
 
-    <!--TODO (Step 1: Add a fab button for Launching the add board screen.)-->
-    <!--START-->
     <!--Here the ic_vector_add_24dp is added in drawable folder.-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_create_board"
@@ -32,5 +30,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_vector_add_24dp" />
-    <!--END-->
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

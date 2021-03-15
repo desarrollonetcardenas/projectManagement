@@ -9,8 +9,6 @@ object Constants {
     const val BOARDS: String = "boards"
     const val TASK_LIST: String = "taskList"
 
-    // TODO (Step 8: Add the Firebase database field names as constants.)
-    // START
     // Firebase database field names
     const val IMAGE: String = "image"
     const val NAME: String = "name"

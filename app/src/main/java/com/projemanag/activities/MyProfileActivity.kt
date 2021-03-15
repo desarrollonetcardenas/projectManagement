@@ -32,14 +32,11 @@ class MyProfileActivity : BaseActivity() {
     // Add a global variable for URI of a selected image from phone storage.
     private var mSelectedImageFileUri: Uri? = null
 
-    // TODO (Step 6: Add the global variables for UserDetails and Profile Image URL.)
-    // START
     // A global variable for user details.
     private lateinit var mUserDetails: User
 
     // A global variable for a user profile image URL
     private var mProfileImageURL: String = ""
-    // END
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +68,6 @@ class MyProfileActivity : BaseActivity() {
             }
         }
 
-        // TODO (Step 10: Add a click event for updating the user profile data to the database.)
-        // START
         binding.btnUpdate.setOnClickListener {
 
             // Here if the image is not selected then update the other details of user.
@@ -87,7 +82,6 @@ class MyProfileActivity : BaseActivity() {
                 updateUserProfileData()
             }
         }
-        // END
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -164,11 +158,8 @@ class MyProfileActivity : BaseActivity() {
      */
     fun setUserDataInUI(user: User) {
 
-        // TODO (Step 7: Initialize the user details variable)
-        // START
         // Initialize the user details variable
         mUserDetails = user
-        // END
 
         Glide
                 .with(this@MyProfileActivity)
@@ -253,10 +244,7 @@ class MyProfileActivity : BaseActivity() {
         // Update the data in the database.
         FirestoreClass().updateUserProfileData(this@MyProfileActivity, userHashMap)
     }
-    // END
 
-    // TODO (Step 4: Create a function to notify the user profile is updated successfully.)
-    // START
     /**
      * A function to notify the user profile is updated successfully.
      */
@@ -268,5 +256,4 @@ class MyProfileActivity : BaseActivity() {
 
         finish()
     }
-    // END
 }
