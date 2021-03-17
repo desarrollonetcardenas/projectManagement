@@ -1,15 +1,16 @@
 package com.projemanag.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.projemanag.R
 import com.projemanag.adapters.TaskListItemsAdapter
 import com.projemanag.databinding.ActivityTaskListBinding
 import com.projemanag.firebase.FirestoreClass
 import com.projemanag.models.Board
+import com.projemanag.models.Card
 import com.projemanag.models.Task
 import com.projemanag.utils.Constants
 
@@ -110,6 +111,49 @@ class TaskListActivity : BaseActivity() {
 
         showProgressDialog(R.string.please_wait.toString())
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
+
+    fun addCardToTaskList(position: Int, cardName: String) {
+        // Remove the last item
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+
+        val cardsAssignedUsersList: ArrayList<String> = ArrayList()
+        cardsAssignedUsersList.add(FirestoreClass().getCurrentUserID())
+
+        val card = Card(cardName, FirestoreClass().getCurrentUserID(), cardsAssignedUsersList)
+        val cardsList = mBoardDetails.taskList[position].cards
+        cardsList.add(card)
+
+        val task = Task(
+                mBoardDetails.taskList[position].title,
+                mBoardDetails.taskList[position].createdBy,
+                cardsList
+        )
+
+        mBoardDetails.taskList[position] = task
+
+        showProgressDialog(R.string.please_wait.toString())
+        FirestoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
+
+    /*
+    * Options Menu
+    * */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.menu_members, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_members -> {
+                val intent = Intent(this, MembersActivity::class.java)
+                intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

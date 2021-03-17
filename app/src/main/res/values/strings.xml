@@ -38,4 +38,12 @@
 
     <string name="delete_list_alert_dialog_message">Are you sure want to delete task list</string>
 
+    <string name="members">Members</string>
+
+    <string name="add_member">Add Member</string>
+    <string name="cancel">CANCEL</string>
+    <string name="add">ADD</string>
+    <string name="search_member">Search Member</string>
+
+
 </resources>

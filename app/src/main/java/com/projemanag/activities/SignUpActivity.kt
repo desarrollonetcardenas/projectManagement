@@ -91,6 +91,7 @@ class SignUpActivity : BaseActivity() {
                             // call the registerUser function of FirestoreClass to make an entry in the database.
                             FirestoreClass().registerUser(this@SignUpActivity, user)
                         } else {
+                            hideProgressDialog()
                             Toast.makeText(
                                 this@SignUpActivity,
                                 task.exception!!.message,

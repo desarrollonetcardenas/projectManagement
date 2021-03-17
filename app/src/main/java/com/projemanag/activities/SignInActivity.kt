@@ -74,6 +74,7 @@ class SignInActivity : BaseActivity() {
                         // Calling the FirestoreClass signInUser function to get the data of user from database.
                         FirestoreClass().loadUserData(this@SignInActivity)
                     } else {
+                        hideProgressDialog()
                         Toast.makeText(
                             this@SignInActivity,
                             task.exception!!.message,

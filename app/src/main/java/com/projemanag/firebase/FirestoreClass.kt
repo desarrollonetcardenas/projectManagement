@@ -201,6 +201,7 @@ class FirestoreClass {
 
                     taskListActivity.boardDetails(board)
                 }catch(e: Exception) {
+                    taskListActivity.hideProgressDialog()
                     Toast.makeText(taskListActivity, "Error occurred while getting board details", Toast.LENGTH_LONG)
                         .show()
                     Log.e(javaClass.simpleName, e.message.toString())
@@ -232,6 +233,37 @@ class FirestoreClass {
                     Log.e(this.javaClass.simpleName, "Error updating the task list: ${exception.message}", exception)
                     activity.hideProgressDialog()
                 }
+    }
+
+    fun getAssignedMembersListDetails(activity: MembersActivity, assignedTo: ArrayList<String>) {
+        mFireStore.collection(Constants.USERS)
+            .whereIn(Constants.ID, assignedTo)
+            .get()
+            .addOnSuccessListener {
+                document ->
+                Log.e(this.javaClass.simpleName, document.documents.toString())
+
+                val usersList: ArrayList<User> = ArrayList()
+
+                for(i in document.documents) {
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)
+                }
+
+                activity.setupMembersList(usersList)
+            }
+            .addOnFailureListener { exception ->
+
+                activity.hideProgressDialog()
+
+                Log.e(this.javaClass.simpleName,
+                    "Error while assigning a member to the list",
+                    exception)
+            }
+    }
+
+    fun getMemberDetails(activity: MembersActivity, email: String) {
+        mFireStore.collection()
     }
 
 }

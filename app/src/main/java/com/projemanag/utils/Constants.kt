@@ -8,6 +8,9 @@ object Constants {
     const val USERS: String = "users"
     const val BOARDS: String = "boards"
     const val TASK_LIST: String = "taskList"
+    const val CARD_LIST: String = "taskList"
+    const val BOARD_DETAIL: String = "board_detail"
+    const val ID: String = "id"
 
     // Firebase database field names
     const val IMAGE: String = "image"

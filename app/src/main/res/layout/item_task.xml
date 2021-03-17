@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Here all the constant values are added in their respective files and folders.-->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -138,7 +137,6 @@
                 tools:visibility="visible">
 
                 <LinearLayout
-                    android:id="@+id/ll_editable_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -204,6 +202,15 @@
                         android:padding="@dimen/task_item_image_buttons_padding"
                         android:src="@drawable/ic_cancel" />
 
+                    <EditText
+                        android:id="@+id/et_card_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autofillHints="@string/hint_card_name"
+                        android:hint="@string/hint_card_name"
+                        android:inputType="text" />
+
                     <ImageButton
                         android:id="@+id/ib_done_card_name"
                         android:layout_width="wrap_content"
@@ -227,17 +234,7 @@
                 android:text="@string/action_add_card"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/task_item_add_item_text_size"
-                android:visibility="visible"
                 tools:visibility="visible" />
-
-            <EditText
-                android:id="@+id/et_card_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autofillHints="@string/hint_card_name"
-                android:hint="@string/hint_card_name"
-                android:inputType="text" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

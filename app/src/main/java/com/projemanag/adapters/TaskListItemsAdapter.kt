@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.projemanag.R
 import com.projemanag.activities.TaskListActivity
@@ -162,6 +163,48 @@ open class TaskListItemsAdapter(
                         }
                     }
 
+            /*
+            * Add new card onClickListener
+            * */
+            holder.itemView.findViewById<TextView>(R.id.tv_add_card)
+                    .setOnClickListener {
+
+                        holder.itemView.findViewById<View>(R.id.tv_add_card).visibility = View.GONE
+                        holder.itemView.findViewById<View>(R.id.cv_add_card).visibility = View.VISIBLE
+
+                        /*
+                        * Cancel Add new card onClickListener
+                        * */
+                        holder.itemView.findViewById<View>(R.id.ib_close_card_name)
+                                .setOnClickListener {
+                                    holder.itemView.findViewById<View>(R.id.tv_add_card).visibility = View.VISIBLE
+                                    holder.itemView.findViewById<View>(R.id.cv_add_card).visibility = View.GONE
+                                }
+
+                        holder.itemView.findViewById<View>(R.id.ib_done_card_name)
+                                .setOnClickListener {
+                                    val cardName = holder.itemView.findViewById<TextView>(R.id.et_card_name).text.toString()
+
+                                    if (cardName.isNotEmpty()) {
+                                        if (context is TaskListActivity) {
+                                            context.addCardToTaskList(position, cardName)
+                                        }
+                                    }else{
+                                        Toast.makeText(context, "Please Enter Card Name.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                    }
+
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list)
+                .layoutManager = LinearLayoutManager(context)
+
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list)
+                .setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context, model.cards)
+
+            holder.itemView.findViewById<RecyclerView>(R.id.rv_card_list)
+                .adapter = adapter
         }
     }
 
