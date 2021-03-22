@@ -58,8 +58,22 @@ class MembersActivity : BaseActivity() {
 
     fun memberDetails(user: User) {
 
+        mBoardDetails.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToBoard(this, mBoardDetails, user)
+
     }
 
+    fun memberAssignedSuccess(user: User) {
+
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setupMembersList(mAssignedMembersList)
+
+    }
+
+    /*
+    * Display all of the members List in the RecyclerView
+    * */
     fun setupMembersList(members: ArrayList<User>) {
 
         mAssignedMembersList = members
@@ -102,7 +116,8 @@ class MembersActivity : BaseActivity() {
                 if(email.isNotEmpty()) {
 
                     dialog.dismiss()
-                    //TODO: Implement adding member logic
+                    showProgressDialog(R.string.please_wait.toString())
+                    FirestoreClass().getMemberDetails(this, email)
 
                 } else {
                     Toast.makeText(this,

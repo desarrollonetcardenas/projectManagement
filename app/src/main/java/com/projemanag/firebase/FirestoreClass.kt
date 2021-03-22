@@ -9,7 +9,6 @@ import com.google.firebase.firestore.SetOptions
 import com.projemanag.activities.*
 import com.projemanag.model.User
 import com.projemanag.models.Board
-import com.projemanag.models.Task
 import com.projemanag.utils.Constants
 
 class FirestoreClass {
@@ -263,7 +262,61 @@ class FirestoreClass {
     }
 
     fun getMemberDetails(activity: MembersActivity, email: String) {
-        mFireStore.collection()
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL, email)
+            .get()
+            .addOnSuccessListener {
+                document ->
+
+                if(document.documents.size > 0) {
+
+                    val user = document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+                } else {
+                    activity.hideProgressDialog()
+                    activity.showErrorSnackBar("No such member found.")
+                }
+
+            }
+            .addOnFailureListener {
+                exception ->
+
+                Log.e(this.javaClass.simpleName,
+                    "Error getting member details. ${exception.message}",
+                    exception)
+
+                Toast.makeText(activity,
+                    "An error has occurred while getting member details",Toast.LENGTH_LONG)
+                    .show()
+            }
+    }
+
+    fun assignMemberToBoard(activity:MembersActivity, board: Board, user: User) {
+
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo
+
+
+        mFireStore.collection(Constants.BOARDS)
+                .document(board.documentId)
+                .update(assignedToHashMap)
+                .addOnSuccessListener {
+                    Log.i(activity.javaClass.simpleName, "TaskList updated successfully.")
+                    activity.memberAssignedSuccess(user)
+                }
+                .addOnFailureListener {
+                    exception ->
+
+                    activity.hideProgressDialog()
+
+                    Log.e(this.javaClass.simpleName,
+                            "Error assigning member to board. ${exception.message}",
+                            exception)
+
+                    Toast.makeText(activity,
+                            "An error has occurred while adding a member to board",Toast.LENGTH_LONG)
+                            .show()
+                }
     }
 
 }
