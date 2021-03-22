@@ -1,5 +1,6 @@
 package com.projemanag.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
@@ -20,6 +21,7 @@ class MembersActivity : BaseActivity() {
     private lateinit var binding: ActivityMembersBinding
     private lateinit var mBoardDetails: Board
     private lateinit var mAssignedMembersList: ArrayList<User>
+    private var anyChangesMade : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,9 @@ class MembersActivity : BaseActivity() {
 
         hideProgressDialog()
         mAssignedMembersList.add(user)
+
+        anyChangesMade = true
+
         setupMembersList(mAssignedMembersList)
 
     }
@@ -86,6 +91,16 @@ class MembersActivity : BaseActivity() {
         binding.rvMembersList.adapter = adapter
     }
 
+
+    override fun onBackPressed() {
+
+        if(anyChangesMade) {
+            setResult(Activity.RESULT_OK)
+        }
+
+        super.onBackPressed()
+
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add_member, menu)

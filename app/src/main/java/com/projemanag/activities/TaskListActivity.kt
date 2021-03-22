@@ -1,7 +1,9 @@
 package com.projemanag.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +19,7 @@ import com.projemanag.utils.Constants
 class TaskListActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTaskListBinding
-    private lateinit var boardDocumentId: String
+    private lateinit var mBoardDocumentId: String
     private lateinit var mBoardDetails: Board
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +32,14 @@ class TaskListActivity : BaseActivity() {
 
         if(intent.hasExtra(Constants.DOCUMENT_ID)) {
 
-            boardDocumentId = intent.getStringExtra(Constants.DOCUMENT_ID)!!
+            mBoardDocumentId = intent.getStringExtra(Constants.DOCUMENT_ID)!!
             showProgressDialog(R.string.please_wait.toString())
-            FirestoreClass().getBoardDetails(this, boardDocumentId)
+            FirestoreClass().getBoardDetails(this, mBoardDocumentId)
         }
 
     }
+
+
 
     private fun setupActionBar() {
 
@@ -136,6 +140,29 @@ class TaskListActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == Activity.RESULT_OK
+                && requestCode == MEMBERS_REQUEST_CODE) {
+            showProgressDialog(R.string.please_wait.toString())
+            FirestoreClass().getBoardDetails(this, mBoardDocumentId)
+        } else {
+            Log.e(this.javaClass.simpleName, "Cancelled")
+        }
+
+    }
+
+    override fun onResume() {
+        /*
+        * get board details
+        * */
+        showProgressDialog(R.string.please_wait.toString())
+        FirestoreClass().getBoardDetails(this, mBoardDocumentId)
+
+        super.onResume()
+    }
+
     /*
     * Options Menu
     * */
@@ -150,10 +177,16 @@ class TaskListActivity : BaseActivity() {
             R.id.action_members -> {
                 val intent = Intent(this, MembersActivity::class.java)
                 intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
-                startActivity(intent)
+                startActivityForResult(intent, MEMBERS_REQUEST_CODE)
+
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val MEMBERS_REQUEST_CODE : Int = 13
     }
 
 }
